@@ -1,8 +1,8 @@
 FROM gitpod/workspace-full
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -qq \
-    && apt-get install -y \
+RUN sudo apt-get update -qq \
+    && sudo apt-get install -y \
 # x86_64 / generic packages
       bash \
       build-essential \
@@ -18,10 +18,10 @@ RUN apt-get update -qq \
       libffi-dev \
       libssl-dev \
       python3-dev \ 
-    && rm -rf /var/cache/apt/* /var/lib/apt/lists/*;
+    && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/*;
 
 # Needs to be installed as root
-RUN pip3 install adafruit-nrfutil
+RUN sudo pip3 install adafruit-nrfutil
 
 RUN sudo chown -R gitpod /opt
 
