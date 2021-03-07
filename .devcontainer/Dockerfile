@@ -47,4 +47,4 @@ COPY create_build_openocd.sh .
 
 RUN adduser infinitime
 
-ENV SOURCES_DIR /workspaces/Pinetime
+ENV SOURCES_DIR /workspaces/InfiniTime
