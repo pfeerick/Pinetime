@@ -26,28 +26,24 @@ RUN apt-get update -qq \
     && rm -rf /var/cache/apt/* /var/lib/apt/lists/*;
 
 RUN pip3 install adafruit-nrfutil
-# required for McuBoot
-RUN pip3 install setuptools_rust
+RUN pip3 install -Iv cryptography==3.3
 
 WORKDIR /opt/
-# build.sh knows how to compile but it problimatic on Win10
+# build.sh knows how to compile
 COPY build.sh .
-# create_build_openocd.sh uses cmake to crate to build directory
+# create_build_openocd.sh uses cmake to create to build directory
 COPY create_build_openocd.sh .
 
 # Lets get each in a separate docker layer for better downloads
 # GCC
-# RUN bash -c "source /opt/build.sh; GetGcc;"
-RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2 -O - | tar -xj -C /opt
+RUN bash -c "source /opt/build.sh; GetGcc;"
+
 # NrfSdk
-# RUN bash -c "source /opt/build.sh; GetNrfSdk;"
-RUN wget -q "https://developer.nordicsemi.com/nRF5_SDK/nRF5_SDK_v15.x.x/nRF5_SDK_15.3.0_59ac345.zip" -O /tmp/nRF5_SDK_15.3.0_59ac345
-RUN unzip -q /tmp/nRF5_SDK_15.3.0_59ac345 -d /opt
-RUN rm /tmp/nRF5_SDK_15.3.0_59ac345
+RUN bash -c "source /opt/build.sh; GetNrfSdk;"
+
 # McuBoot
-# RUN bash -c "source /opt/build.sh; GetMcuBoot;"
-RUN git clone https://github.com/JuulLabs-OSS/mcuboot.git
-RUN pip3 install -r ./mcuboot/scripts/requirements.txt
+RUN bash -c "source /opt/build.sh; GetMcuBoot;"
+
 
 RUN adduser infinitime
 
