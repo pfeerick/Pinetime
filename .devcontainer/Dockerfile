@@ -31,8 +31,6 @@ RUN pip3 install -Iv cryptography==3.3
 WORKDIR /opt/
 # build.sh knows how to compile
 COPY build.sh .
-# create_build_openocd.sh uses cmake to create to build directory
-COPY create_build_openocd.sh .
 
 # Lets get each in a separate docker layer for better downloads
 # GCC
@@ -44,6 +42,8 @@ RUN bash -c "source /opt/build.sh; GetNrfSdk;"
 # McuBoot
 RUN bash -c "source /opt/build.sh; GetMcuBoot;"
 
+# create_build_openocd.sh uses cmake to create to build directory
+COPY create_build_openocd.sh .
 
 RUN adduser infinitime
 
