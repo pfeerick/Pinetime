@@ -16,6 +16,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  REPO_OWNER: ${{ github.repository_owner }}
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -27,6 +28,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Fetch Repo Name
+        id: repo-name
+        run: echo "::set-output name=value::$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')"
 
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
@@ -40,7 +45,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.REPO_OWNER }}/${{ steps.repo-name.outputs.value }}-build
           # generate Docker tags based on the following events/attributes
           tags: |
             type=edge,branch=develop
