@@ -49,6 +49,7 @@ jobs:
       - name: Build InfiniTime Docker Image
         uses: docker/build-push-action@v3
         with:
+          context: docker
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
