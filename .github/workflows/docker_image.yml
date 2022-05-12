@@ -54,6 +54,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=sha
+            type=raw,value=amd64
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -66,5 +67,4 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ${{ env.REGISTRY }}/${{ env.REPO_OWNER }}/${{ steps.repo-name.outputs.value }}-build:amd64
           labels: ${{ steps.meta.outputs.labels }}
