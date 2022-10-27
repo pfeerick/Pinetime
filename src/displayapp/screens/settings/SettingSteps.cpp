@@ -12,15 +12,11 @@ namespace {
   }
 }
 
-SettingSteps::SettingSteps(
-  Pinetime::Applications::DisplayApp *app, Pinetime::Controllers::Settings &settingsController) :
-  Screen(app),
-  settingsController{settingsController}
-{
+SettingSteps::SettingSteps(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::Settings& settingsController)
+  : Screen(app), settingsController {settingsController} {
 
-  lv_obj_t * container1 = lv_cont_create(lv_scr_act(), nullptr);
+  lv_obj_t* container1 = lv_cont_create(lv_scr_act(), nullptr);
 
-  //lv_obj_set_style_local_bg_color(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x111111));
   lv_obj_set_style_local_bg_opa(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
   lv_obj_set_style_local_pad_all(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 10);
   lv_obj_set_style_local_pad_inner(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 5);
@@ -31,13 +27,13 @@ SettingSteps::SettingSteps(
   lv_cont_set_layout(container1, LV_LAYOUT_COLUMN_LEFT);
 
   lv_obj_t* title = lv_label_create(lv_scr_act(), nullptr);
-  lv_label_set_text_static(title,"Daily steps goal");
+  lv_label_set_text_static(title, "Daily steps goal");
   lv_label_set_align(title, LV_LABEL_ALIGN_CENTER);
   lv_obj_align(title, lv_scr_act(), LV_ALIGN_IN_TOP_MID, 15, 15);
 
   lv_obj_t* icon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(icon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_ORANGE);
-  
+
   lv_label_set_text_static(icon, Symbols::shoe);
   lv_label_set_align(icon, LV_LABEL_ALIGN_CENTER);
   lv_obj_align(icon, title, LV_ALIGN_OUT_LEFT_MID, -10, 0);
@@ -52,7 +48,8 @@ SettingSteps::SettingSteps(
   btnPlus->user_data = this;
   lv_obj_set_size(btnPlus, 80, 50);
   lv_obj_align(btnPlus, lv_scr_act(), LV_ALIGN_CENTER, 55, 80);
-  lv_obj_set_style_local_value_str(btnPlus, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "+");
+  lv_obj_t* lblPlus = lv_label_create(btnPlus, nullptr);
+  lv_label_set_text_static(lblPlus, "+");
   lv_obj_set_event_cb(btnPlus, event_handler);
 
   btnMinus = lv_btn_create(lv_scr_act(), nullptr);
@@ -60,8 +57,8 @@ SettingSteps::SettingSteps(
   lv_obj_set_size(btnMinus, 80, 50);
   lv_obj_set_event_cb(btnMinus, event_handler);
   lv_obj_align(btnMinus, lv_scr_act(), LV_ALIGN_CENTER, -55, 80);
-  lv_obj_set_style_local_value_str(btnMinus, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "-");
-
+  lv_obj_t* lblMinus = lv_label_create(btnMinus, nullptr);
+  lv_label_set_text_static(lblMinus, "-");
 }
 
 SettingSteps::~SettingSteps() {
@@ -69,24 +66,23 @@ SettingSteps::~SettingSteps() {
   settingsController.SaveSettings();
 }
 
-void SettingSteps::UpdateSelected(lv_obj_t *object, lv_event_t event) {
+void SettingSteps::UpdateSelected(lv_obj_t* object, lv_event_t event) {
   uint32_t value = settingsController.GetStepsGoal();
-  if(object == btnPlus && (event == LV_EVENT_PRESSED)) {
+  if (object == btnPlus && (event == LV_EVENT_PRESSED)) {
     value += 1000;
-    if ( value <= 500000 ) {
+    if (value <= 500000) {
       settingsController.SetStepsGoal(value);
       lv_label_set_text_fmt(stepValue, "%lu", settingsController.GetStepsGoal());
       lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_CENTER, 0, -10);
     }
   }
 
-  if(object == btnMinus && (event == LV_EVENT_PRESSED)) {
+  if (object == btnMinus && (event == LV_EVENT_PRESSED)) {
     value -= 1000;
-    if ( value >= 1000 ) {
+    if (value >= 1000) {
       settingsController.SetStepsGoal(value);
       lv_label_set_text_fmt(stepValue, "%lu", settingsController.GetStepsGoal());
       lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_CENTER, 0, -10);
     }
   }
-
 }

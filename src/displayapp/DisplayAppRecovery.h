@@ -35,6 +35,7 @@ namespace Pinetime {
     class TimerController;
     class AlarmController;
     class BrightnessController;
+    class FS;
   }
 
   namespace System {
@@ -59,9 +60,12 @@ namespace Pinetime {
                  Pinetime::Controllers::TimerController& timerController,
                  Pinetime::Controllers::AlarmController& alarmController,
                  Pinetime::Controllers::BrightnessController& brightnessController,
-                 Pinetime::Controllers::TouchHandler& touchHandler);
+                 Pinetime::Controllers::TouchHandler& touchHandler,
+                 Pinetime::Controllers::FS& filesystem);
       void Start();
-      void Start(Pinetime::System::BootErrors){ Start(); };
+      void Start(Pinetime::System::BootErrors) {
+        Start();
+      };
       void PushMessage(Pinetime::Applications::Display::Messages msg);
       void Register(Pinetime::System::SystemTask* systemTask);
 
